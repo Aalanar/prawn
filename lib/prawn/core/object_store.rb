@@ -147,7 +147,8 @@ module Prawn
           raise ArgumentError, "#{filename} does not exist"
         end
 
-        hash = PDF::Reader::ObjectHash.new(filename)
+        @object_hashes ||= {}
+        hash = (@object_hashes[filename] ||= PDF::Reader::ObjectHash.new(filename))
         ref  = hash.page_references[page_num - 1]
 
         ref.nil? ? nil : load_object_graph(hash, ref).identifier
